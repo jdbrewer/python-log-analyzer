@@ -64,7 +64,7 @@ python main.py --log-dir ./data --output-dir ./output
 
 Launch the interactive web dashboard:
 ```bash
-python main.py --web --log-dir ./data --log-format standard
+python -m src.main --web --log-dir ./data --log-format standard
 ```
 
 Then open your browser to `http://localhost:5000`
