@@ -1,6 +1,6 @@
 # Python Log Analyzer
 
-A powerful log analysis tool with both command-line and web interface capabilities for processing, analyzing, and visualizing log files.
+A log analysis tool with both command-line and web interface capabilities for processing, analyzing, and visualizing log files.
 
 ## Features
 
