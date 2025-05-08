@@ -124,34 +124,58 @@ async function loadLogs() {
 
 // Function to update pagination controls
 function updatePagination(totalPages) {
-    const pagination = document.getElementById('pagination');
-    pagination.innerHTML = '';
-    
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+
     // Previous button
-    const prevLi = document.createElement('li');
-    prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
-    prevLi.innerHTML = `
-        <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Previous</a>
-    `;
+    const prevLi = document.createElement("li");
+    prevLi.className = `page-item${currentPage === 1 ? " disabled" : ""}`;
+    prevLi.innerHTML = `<a class="page-link" href="#" tabindex="-1" aria-disabled="${currentPage === 1}" onclick="if(currentPage > 1) changePage(${currentPage - 1}); return false;">Previous</a>`;
     pagination.appendChild(prevLi);
-    
-    // Page numbers
-    for (let i = 1; i <= totalPages; i++) {
-        const li = document.createElement('li');
-        li.className = `page-item ${i === currentPage ? 'active' : ''}`;
-        li.innerHTML = `
-            <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
-        `;
+
+    // Always show first page
+    pagination.appendChild(createPageItem(1, "1", currentPage === 1));
+
+    // Show ellipsis if needed
+    if (currentPage > 4) {
+        const li = document.createElement("li");
+        li.className = "page-item disabled";
+        li.innerHTML = `<span class="page-link">...</span>`;
         pagination.appendChild(li);
     }
-    
+
+    // Show pages around current page
+    for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) {
+        if (i === 1 || i === totalPages) continue; // already shown
+        pagination.appendChild(createPageItem(i, i, currentPage === i));
+    }
+
+    // Show ellipsis if needed
+    if (currentPage < totalPages - 3) {
+        const li = document.createElement("li");
+        li.className = "page-item disabled";
+        li.innerHTML = `<span class="page-link">...</span>`;
+        pagination.appendChild(li);
+    }
+
+    // Always show last page if more than one page
+    if (totalPages > 1) {
+        pagination.appendChild(createPageItem(totalPages, totalPages, currentPage === totalPages));
+    }
+
     // Next button
-    const nextLi = document.createElement('li');
-    nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
-    nextLi.innerHTML = `
-        <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Next</a>
-    `;
+    const nextLi = document.createElement("li");
+    nextLi.className = `page-item${currentPage === totalPages ? " disabled" : ""}`;
+    nextLi.innerHTML = `<a class="page-link" href="#" tabindex="-1" aria-disabled="${currentPage === totalPages}" onclick="if(currentPage < totalPages) changePage(${currentPage + 1}); return false;">Next</a>`;
     pagination.appendChild(nextLi);
+
+    // Helper function
+    function createPageItem(page, text = null, active = false, disabled = false) {
+        const li = document.createElement("li");
+        li.className = `page-item${active ? " active" : ""}${disabled ? " disabled" : ""}`;
+        li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${page}); return false;">${text || page}</a>`;
+        return li;
+    }
 }
 
 // Function to change page
