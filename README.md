@@ -49,7 +49,7 @@ pip install -r requirements.txt
 
 Analyze log files and generate reports:
 ```bash
-python main.py --log-dir ./data --output-dir ./output
+python -m src.main --log-dir ./data --output-dir ./output
 ```
 
 #### Command Line Arguments
